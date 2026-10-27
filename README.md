@@ -16,22 +16,51 @@ automatically.
 
 ## Installation
 
+Requires R >= 4.1 and Seurat v5. seuratflow uses packages from CRAN, Bioconductor and GitHub.
+`remotes::install_github()` installs the CRAN ones for you, but installing everything first
+(below) avoids the usual failures from the Bioconductor and GitHub packages and from packages
+that some minimal R installations lack (for example `cluster` and `ggraph`).
+
 ```r
-# Bioconductor dependencies
-install.packages("BiocManager")
+# 1. CRAN
+install.packages(c(
+  "remotes", "BiocManager",
+  "Seurat", "SeuratObject", "scCustomize", "harmony",            # single-cell
+  "ggplot2", "patchwork", "ggraph", "clustree", "ggridges", "RColorBrewer",   # plots
+  "dplyr", "tidyr", "readr", "readxl", "yaml", "rlang", "Matrix",
+  "future", "future.apply", "cluster"
+))
+
+# 2. Bioconductor
 BiocManager::install(c("scDblFinder", "scuttle", "SingleCellExperiment"))
 
-# GitHub dependencies
-install.packages("remotes")
-remotes::install_github("haotian-zhuang/findPC")
-remotes::install_github("immunogenomics/presto")   # optional: much faster marker detection
+# 3. GitHub
+remotes::install_github("haotian-zhuang/findPC")   # picks the number of PCs
 
-# seuratflow
+# 4. seuratflow
 remotes::install_github("wiktormiko/seuratflow")
 ```
 
-Optional extras: `glmGamPoi` (Bioconductor, makes SCTransform much faster), `hdf5r` (reading h5
-files), `ggrastr`.
+Check that nothing is missing (the result should be `character(0)`):
+
+```r
+required <- c("Seurat", "SeuratObject", "scCustomize", "harmony", "ggplot2", "patchwork",
+              "ggraph", "clustree", "ggridges", "RColorBrewer", "dplyr", "tidyr", "readr",
+              "readxl", "yaml", "rlang", "Matrix", "future", "future.apply", "cluster",
+              "scDblFinder", "scuttle", "SingleCellExperiment", "findPC")
+setdiff(required, rownames(installed.packages()))
+```
+
+Optional packages:
+
+| package | where | used for |
+|---|---|---|
+| `hdf5r` | CRAN | `read10X_h5_multi_directory_add_QC()` and `read_cellbender_multi_directory_add_QC()` |
+| `presto` | GitHub: `immunogenomics/presto` | much faster marker detection |
+| `glmGamPoi` | Bioconductor | much faster `seurat_preprocess(normalization = "sct")` |
+
+If you reinstall seuratflow while R is running, restart R before using it again; otherwise R
+can report a corrupt lazy-load database.
 
 ## Quick start
 

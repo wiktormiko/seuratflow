@@ -49,7 +49,6 @@ Suggests:
     hdf5r,
     presto,
     glmGamPoi,
-    ggrastr,
     pkgload,
     sctransform,
     methods,
