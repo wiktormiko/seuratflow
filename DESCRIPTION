@@ -1,0 +1,62 @@
+Package: seuratflow
+Title: Seurat Preprocessing Workflow with Built-in Quality Control Reports
+Version: 0.0.0.9000
+Authors@R:
+    person("Wiktor", "Mikolajczak", , "93826754+wiktormiko@users.noreply.github.com", role = c("aut", "cre"))
+Description: Helpers that automate a Seurat (v5) single-cell RNA-seq
+    preprocessing workflow: parallel reading of 10X matrix, 10X h5 and
+    CellBender output with per-cell quality control (MAD-based outlier flags and
+    optional doublet detection), log-normalization or SCTransform with Harmony
+    integration, resolution selection (clustree and silhouette scores), marker
+    detection with DotPlots at every resolution, and ggplot2 themes for UMAPs.
+    Quality control tables, plots and parameters are written to a
+    'QualityControl' folder with automatically sized figures.
+License: MIT + file LICENSE
+URL: https://github.com/wiktormiko/seuratflow
+BugReports: https://github.com/wiktormiko/seuratflow/issues
+Depends:
+    R (>= 4.1.0)
+Imports:
+    Seurat (>= 5.0.0),
+    SeuratObject (>= 5.0.0),
+    ggplot2 (>= 3.5.0),
+    patchwork,
+    dplyr,
+    tidyr,
+    readr,
+    readxl,
+    future,
+    future.apply,
+    scuttle,
+    scDblFinder,
+    SingleCellExperiment,
+    scCustomize,
+    harmony,
+    findPC,
+    clustree,
+    ggridges,
+    RColorBrewer,
+    cluster,
+    yaml,
+    rlang,
+    Matrix,
+    stats,
+    utils,
+    tools,
+    grDevices
+Suggests:
+    hdf5r,
+    presto,
+    glmGamPoi,
+    ggrastr,
+    pkgload,
+    sctransform,
+    methods,
+    testthat (>= 3.0.0)
+Remotes:
+    haotian-zhuang/findPC,
+    immunogenomics/presto
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.1.1
