@@ -105,11 +105,25 @@ test_that("seurat_preprocess works with SCT and without Harmony", {
   expect_true("leiden_0.3" %in% names(sct[[]]))
 })
 
-test_that("UMAP plots return patchworks with size hints", {
+# Drawing a plot (not just building the object) is what exposed a missing-guide bug once,
+# so every returned plot is rendered to a file.
+renders <- function(p) {
+  f <- tempfile(fileext = ".png")
+  ggplot2::ggsave(f, p, width = 6, height = 5, dpi = 40, limitsize = FALSE)
+  file.exists(f)
+}
+
+test_that("UMAP plots return patchworks with size hints and draw", {
   for (p in list(plot_integration_umaps(pp), plot_qc_umaps(pp), plot_cluster_umaps(pp))) {
     expect_s3_class(p, "patchwork")
     expect_true(all(attr(p, "size_in") > 0))
+    expect_no_error(renders(p))
   }
+})
+
+test_that("QC plots draw", {
+  expect_no_error(renders(plot_qc_ridges(so)))
+  expect_no_error(renders(plot_qc_scatter(so)))
 })
 
 test_that("choose_resolution returns tables and plots", {
@@ -118,6 +132,10 @@ test_that("choose_resolution returns tables and plots", {
   expect_true(all(c("table", "per_cluster", "clustree", "silhouette",
                     "silhouette_by_cluster") %in% names(res)))
   expect_named(attr(res$clustree, "size_in"), c("width", "height"))
+  # clustree must draw even when ggraph is not attached
+  expect_no_error(renders(res$clustree))
+  expect_no_error(renders(res$silhouette))
+  expect_no_error(renders(res$silhouette_by_cluster))
 })
 
 test_that("find_markers_all_resolutions returns markers, top markers and DotPlots", {

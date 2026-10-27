@@ -78,7 +78,10 @@ choose_resolution <- function(seurat_obj, prefix = "leiden_", n_cells = 5000, se
 
   list(table = res,
        per_cluster = per_cluster,
-       clustree = .set_size(clustree::clustree(seurat_obj, prefix = prefix),
+       # ggplot2 >= 4.0 looks the "edge_colourbar" guide up by name among attached packages, so
+       # without library(ggraph) the plot fails to draw; passing the guide object avoids that
+       clustree = .set_size(clustree::clustree(seurat_obj, prefix = prefix) +
+                              guides(edge_colour = ggraph::guide_edge_colourbar()),
                             width = max(6, 0.45 * max_k + 3), height = max(5, 1.5 * n_res + 1)),
        silhouette = .set_size(p_sil, width = 5, height = 4),
        silhouette_by_cluster = .set_size(p_cl,
